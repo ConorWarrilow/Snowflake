@@ -1,18 +1,10 @@
-# Import python packages
+import requests
 import streamlit as st
+from snowflake.snowpark.functions import col
 #from snowflake.snowpark.context import get_active_session
 
 # Write directly to the app
 st.title("Customize Your Smoothie! :cup_with_straw:")
-st.write(
-    """Replace this example with your own code!
-    **And if you're new to Streamlit,** check
-    out our easy-to-follow guides at
-    [docs.streamlit.io](https://docs.streamlit.io).
-    """
-)
-
-from snowflake.snowpark.functions import col
 
 name_on_order = st.text_input('Name on smoothie:')
 st.write('The name on your Smoothie will be:', name_on_order)
@@ -37,7 +29,8 @@ if ingredients_list:
 
     for fruit_chosen in ingredients_list:
         ingredients_string += fruit_chosen + ' '
-
+        fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
+        fv_df = st.dataframe(data = fruityvice_response.json(), use_container_width = True)
     #st.write(ingredients_string)
 
     # Were essentially writing our SQL code right here
@@ -57,10 +50,6 @@ if ingredients_list:
         st.success(f"{name_on_order}, Your smoothie is ordered!", icon="✅")
 
 
-import requests
-fruityvice_response = requests.get("https://fruityvice.com/api/fruit/watermelon")
-#st.text(fruityvice_response.json())
-fv_df = st.dataframe(data = fruityvice_response.json(), use_container_width = True)
 
 
 
